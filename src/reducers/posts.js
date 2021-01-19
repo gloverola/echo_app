@@ -1,6 +1,6 @@
 import { FETCH_ALL, CREATE, UPDATE, DELETE } from "../constants/actionTypes";
 
-export default ( posts = [], action ) => {
+export default function( posts = [], action ) {
     switch ( action.type )
     {
         case FETCH_ALL:
