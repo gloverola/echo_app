@@ -223,7 +223,7 @@ const LeftSide = styled.div`
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 30%;
   height: 100vh;
   align-items: center;
   justify-content: center;
