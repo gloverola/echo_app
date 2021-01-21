@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import {
-  Avatar,
   Button,
-  Paper,
   Grid,
-  Typography,
-  Container,
 } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
 import Input from "./Input";
 import { GoogleLogin } from "react-google-login";
@@ -15,6 +10,9 @@ import Icon from './icon'
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { signin, signup } from '../../actions/auth';
+import styled from 'styled-components';
+import crowd from '../../images/crowd.jpg';
+import echo from '../../images/echo.png'
 
 const initialState = {
   firstName: '',
@@ -77,12 +75,13 @@ const Auth = () => {
     };
 
   return (
-    <Container component='main' maxWidth='xs'>
-      <Paper className={classes.paper} elevation={3}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography variant='h5'>{isSignup ? "Sign Up" : "Login"}</Typography>
+    <Container>
+      <LeftSide img={ crowd }>
+        <h2>Your Space To Be Social.</h2>
+        <span>See what people are up to, and join the conversation.</span>
+      </LeftSide>
+      <FormWrapper>
+        <img src={echo} alt="logo" height="50px"/>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             {isSignup && (
@@ -125,7 +124,7 @@ const Auth = () => {
             )}
           </Grid>
 
-          <Button
+          <LoginButton
             type='submit'
             fullWidth
             variant='contained'
@@ -133,11 +132,11 @@ const Auth = () => {
             className={classes.submit}
           >
             {isSignup ? "Sign Up" : "Login"}
-          </Button>
+          </LoginButton>
           <GoogleLogin
             clientId='716651834642-m3468l1utbd8qd33ss7u3f456abf81o5.apps.googleusercontent.com'
             render={(renderProps) => (
-              <Button
+              <GoogleButton
                 className={classes.googleButton}
                 color='primary'
                 fullWidth
@@ -147,13 +146,13 @@ const Auth = () => {
                 variant='contained'
               >
                 Google Sign In
-              </Button>
+              </GoogleButton>
             )}
             onSuccess={googleSuccess}
             onFailure={googleFailure}
             cookiePolicy='single_host_origin'
           />
-          <Grid container justify='flex-end'>
+          <Grid container justify='center'>
             <Grid item>
               <Button onClick={switchMode}>
                 {isSignup
@@ -163,9 +162,109 @@ const Auth = () => {
             </Grid>
           </Grid>
         </form>
-      </Paper>
+      </FormWrapper>
     </Container>
   );
 };
 
 export default Auth;
+
+const Container = styled.main`
+height: 100vh;
+width: 100vw;
+display: flex;
+flex-direction: row;
+
+@media screen and (max-width: 768px) {
+  flex-direction: column;
+  width: 100%;
+}
+
+`
+
+const LeftSide = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  height: 100vh;
+  background: url(${(props) => props.img});
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (max-width: 768px) {
+    height: 30%;
+    width: 100%;
+  }
+
+  h2 {
+    color: #fff;
+    font-size: 4rem;
+
+    @media screen and (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+
+  span {
+    color: rgba(223, 223, 223, 0.5);
+    font-size: 2rem;
+    margin: 0;
+    text-align: center;
+
+    @media screen and (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+`;
+
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 0 2rem;
+
+  @media screen and (max-width: 768px) {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+  }
+`;
+
+const LoginButton = styled.button`
+  background: rgba(63, 98, 252, 0.2);
+  width: 100%;
+  padding: 0.8rem;
+  color: #3f62fc;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all .3s ease;
+
+  &:hover {
+    background: rgba(63, 98, 252, 0.4);
+  }
+`;
+
+const GoogleButton = styled.button`
+  background: rgba(252, 63, 63, 0.2);
+  width: 100%;
+  padding: 0.8rem;
+  color: #fc3f3f;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(252, 63, 63, 0.4);
+  }
+`;

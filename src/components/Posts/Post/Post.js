@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@material-ui/core';
+import { CardActions} from '@material-ui/core';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -7,13 +7,16 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import useStyles from './styles';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import {deletePost, likePost} from '../../../actions/posts'
+import { deletePost, likePost } from '../../../actions/posts';
+import styled from 'styled-components'
 
 const Post = ( { post, setCurrentId } ) => {
     
     const classes = useStyles();
   const dispatch = useDispatch();
-   const user = JSON.parse(localStorage.getItem("profile"));
+  const user = JSON.parse( localStorage.getItem( "profile" ) );
+  
+  console.log(post);
   
    const Likes = () => {
      if (post.likes.length > 0) {
@@ -45,45 +48,38 @@ const Post = ( { post, setCurrentId } ) => {
    };
 
     return (
-      <Card className={classes.card}>
-        <CardMedia
-          className={classes.media}
-          image={
-            post.selectedFile ||
-            "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"
-          }
-          title={post.title}
-        />
-
-        <div className={classes.overlay}>
-          <Typography variant='h6'>{post.name}</Typography>
-          <Typography variant='body2'>
-            {moment(post.createdAt).fromNow()}
-          </Typography>
-        </div>
-        {(user?.result?.googleId === post?.creator ||
-          user?.result?._id === post?.creator) && (
-          <div className={classes.overlay2}>
-            <Button
-              style={{ color: "white" }}
-              size='small'
-              onClick={() => setCurrentId(post._id)}
-            >
-              <MoreHorizIcon fontSize='default' />
-            </Button>
+      <PostCard>
+        <div className='top'>
+          <div className='user-info'>
+            <span className='user'>{post.name}</span>
+            <span className='time'>{moment(post.createdAt).fromNow()}</span>
           </div>
-        )}
-
-        <div className={classes.details}>
-          <Typography variant='body2' color='textSecondary' component='h2'>
-            {post.tags.map((tag) => `#${tag} `)}
-          </Typography>
+          {(user?.result?.googleId === post?.creator ||
+            user?.result?._id === post?.creator) && (
+            <div>
+              <Button
+                style={{ color: "#7f7f7f" }}
+                size='small'
+                onClick={() => setCurrentId(post._id)}
+              >
+                <MoreHorizIcon fontSize='default' />
+              </Button>
+            </div>
+          )}
         </div>
-        <CardContent>
-          <Typography variant='body2' component='p' color='textSecondary'>
-            {post.message}
-          </Typography>
-        </CardContent>
+        <CardContents>
+          <h5 className='message'>{post.message}</h5>
+          <span className='tag'>{post.tags.map((tag) => `#${tag} `)}</span>
+
+          {post?.selectedFile && (
+            <img
+              className='media'
+              src={post.selectedFile || null}
+              alt={post.title}
+            />
+          )}
+        </CardContents>
+
         <CardActions className={classes.cardActions}>
           <Button
             size='small'
@@ -104,8 +100,53 @@ const Post = ( { post, setCurrentId } ) => {
             </Button>
           )}
         </CardActions>
-      </Card>
+      </PostCard>
     );
 }
 
 export default Post
+
+const PostCard = styled.article`
+  height: 100%;
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .media {
+    height: 300px;
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user {
+    font-size: 1rem;
+    color: #7c7b7b;
+  }
+
+  .time {
+    font-size: 0.7rem;
+    color: #bcbcbc;
+  }
+`;
+
+const CardContents = styled.div`
+  padding: 1rem 2rem;
+  margin-bottom: 10px;
+
+  .message {
+    color: #7f7f7f;
+    font-size: 1rem;
+  }
+
+  .tag {
+    color: #009dff;
+    cursor: pointer;
+  }
+`;

@@ -1,15 +1,13 @@
 import React,{useState, useEffect} from 'react';
-import { Grid, Container, Grow } from '@material-ui/core';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import { useDispatch } from "react-redux";
 import { getPosts } from "../../actions/posts";
-import useStyles from './styles'
+import styled from 'styled-components'
 
 const Home = () => {
 
     const [currentId, setCurrentId] = useState(null);
-    const classes = useStyles();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -17,25 +15,26 @@ const Home = () => {
     }, [ dispatch, currentId ] );
     
     return (
-      <Grow in>
-        <Container>
-          <Grid
-            className={classes.mainContainer}
-            container
-            justify='space-between'
-            alignItems='stretch'
-            spacing={3}
-          >
-            <Grid item xs={12} sm={7}>
-              <Posts setCurrentId={setCurrentId} />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Form currentId={currentId} setCurrentId={setCurrentId} />
-            </Grid>
-          </Grid>
-        </Container>
-      </Grow>
+      <Container>
+        <Form currentId={currentId} setCurrentId={setCurrentId} />
+        <Posts setCurrentId={setCurrentId} />
+      </Container>
     );
 }
 
 export default Home
+
+const Container = styled.main`
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 60px 30%;
+  margin: 0 auto;
+  width: 100vw;
+  border: 1px solid #ddd;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 60px 2%;
+    overflow: hidden;
+  }
+`;

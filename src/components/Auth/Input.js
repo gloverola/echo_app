@@ -17,12 +17,13 @@ const Input = ({
     <TextField
       name={name}
       onChange={handleChange}
-      variant='outlined'
+      variant='standard'
       required
       fullWidth
       label={label}
       autoFocus={autoFocus}
-      type={type}
+      type={ type }
+      size="small"
       InputProps={
         name === "password"
           ? {
